@@ -1,7 +1,7 @@
 import asyncio
 import sys
 import streamlit as st
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 # from langgraph.prebuilt import create_react_agent # REMOVE: We are building manually
 from mcp import ClientSession, StdioServerParameters
