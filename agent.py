@@ -31,7 +31,7 @@ CURRENT_YEAR_STR = str(now.year)
 
 
 # Load environment variables from .env file
-load_dotenv()
+#load_dotenv()
 MODEL_NAME = "gpt-4.1-mini-2025-04-14" # Model name
 SERVER_SCRIPT_PATH = os.path.join(os.path.dirname(__file__), "comexstat.py")
 # --- MOVE CONSTANT HERE ---
