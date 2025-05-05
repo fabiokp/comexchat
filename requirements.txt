@@ -8,3 +8,4 @@ langchain-mcp-adapters
 mcp
 httpx
 nest_asyncio
+dotenv

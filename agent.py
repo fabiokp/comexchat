@@ -1,7 +1,7 @@
 import asyncio
 import sys
 import streamlit as st
-# from dotenv import load_dotenv
+from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 # from langgraph.prebuilt import create_react_agent # REMOVE: We are building manually
 from mcp import ClientSession, StdioServerParameters
@@ -31,7 +31,7 @@ CURRENT_YEAR_STR = str(now.year)
 
 
 # Load environment variables from .env file
-#load_dotenv()
+load_dotenv()
 MODEL_NAME = "gpt-4.1-mini-2025-04-14" # Model name
 SERVER_SCRIPT_PATH = os.path.join(os.path.dirname(__file__), "comexstat.py")
 # --- MOVE CONSTANT HERE ---
@@ -299,9 +299,9 @@ async def run_agent_async(model, user_query: str) -> str:
                             # --- Combine final content and tool calls ---
                             if final_content:
                                 agent_result = final_content # Start with the main answer
-                                if tool_calls_info:
+                                #if tool_calls_info:
                                     # Append tool call info if any were found
-                                    agent_result += "\n\n---\n**Tools Used:**\n" + "\n\n".join(tool_calls_info)
+                                #    agent_result += "\n\n---\n**Tools Used:**\n" + "\n\n".join(tool_calls_info)
                             # If final_content is None, agent_result might already be set to an error/warning message
 
                         else:
