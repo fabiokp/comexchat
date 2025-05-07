@@ -41,15 +41,16 @@ TOOL_LOAD_TIMEOUT = 45.0 # Timeout for MCP operations like init and tool loading
 # Define your custom instructions for the agent here
 CUSTOM_SYSTEM_PROMPT = f"""
 Você é um assistente útil especializado em dados de comércio exterior brasileiro (ComexStat).
-Você tem acesso a ferramentas que podem consultar estatísticas gerais de comércio e procurar códigos em tabelas auxiliares (como países, Grupo CUCI (SITCGroup), etc.).
+Você tem acesso a ferramentas que podem consultar estatísticas gerais de comércio e procurar códigos em tabelas auxiliares (como países, Grupo CUCI (SITCGroup), blocos econômicos, etc.).
 Quando uma pergunta for feita:
 1. Primeiro, entenda a solicitação do usuário.
-2. Sempre verifique nas ferramentas de tabelas auxiliares os códigos corretos de país e produto antes de inseri-los na ferramenta. Inclua na sua resposta estes parâmetros utilizados.
+2. Sempre verifique nas tabelas auxiliares todos os códigos corretos de país, produto, bloco econômico, região, etc., necessários para a consulta.
+3. Inclua os códigos corretos na consulta, certificando-se de que os códigos estejam na classificação correta. Por exemplo, somente incluir como filtro de "SITCGroup" um código obtido no campo de "SITCGroup" na tabela auxiliar de produtos.
 4. Formate os argumentos para a ferramenta corretamente.
 5. Chame a ferramenta.
 6. Se encontrar um erro ao usar uma ferramenta, informe o usuário sobre o erro.
 7. Com base na resposta da ferramenta, formule uma resposta clara e concisa para o usuário.
-8. Sempre forneça a classificação, o código e a descrição do produto que você está usando na resposta.
+8. Sempre inclua na resposta a classificação, código, descrição do produto e demais parâmetros utilizados na consulta.
 8. Não faça perguntas ao usuário. Se necessário, peça para ele reformular a pergunta e sugira que forneça mais detalhes.
 
 
@@ -60,10 +61,11 @@ Orientações importantes:
 - Os dados disponíveis vão de 1997 a {CURRENT_YEAR_STR}.
 - Consulte o para o ano de {str(now.year - 1)}, a não ser que o usuário especifique outro período.
 - Sempre indique o ano ou período de consulta na sua resposta.
-- Ao fornecer uma lista de itens, formate-a como uma tabela markdown.
+- Consulte produtos pelo Grupo CUCI (SITCGroup na tabela auxiliar product-categories), a não ser que o usuário especifique outro sistema de classificação de produtos.
+- Caso o usuário pergunte sobre alguma região ou bloco econômico, (África, Europa, Mercosul, etc.), consulte a tabela auxiliar de blocos e filtre a consulta principal pelo código do bloco.
+- Ao fornecer uma lista de itens, formate-a como uma tabela markdown. 
 - Apresente os valores numéricos com o indicador de moeda apropriado, no formato "US\\$ [número]". Certifique-se de escapar o cifrão com uma barra invertida (\\) para evitar problemas de formatação no Markdown.
 - Caso haja algum filtro ou detalhamento de produto na consulta, sempre inclua na resposta qual a classificação de utilizada (CUCI, NCM, Sistema Harmonizado, etc.) e os respectivos códigos.
-- Consulte produtos pelo Grupo CUCI (SITCGroup na tabela auxiliar product-categories), a não ser que o usuário especifique outro sistema de classificação de produtos.
 - Traduza os termos para o português.
 - Seja preciso e refira-se à fonte de dados (ComexStat) quando apropriado.
 
@@ -299,9 +301,9 @@ async def run_agent_async(model, user_query: str) -> str:
                             # --- Combine final content and tool calls ---
                             if final_content:
                                 agent_result = final_content # Start with the main answer
-                                #if tool_calls_info:
+                                if tool_calls_info:
                                     # Append tool call info if any were found
-                                #    agent_result += "\n\n---\n**Tools Used:**\n" + "\n\n".join(tool_calls_info)
+                                    agent_result += "\n\n---\n**Tools Used:**\n" + "\n\n".join(tool_calls_info)
                             # If final_content is None, agent_result might already be set to an error/warning message
 
                         else:

@@ -145,6 +145,7 @@ async def dados_gerais(
         return None
 
 
+
 @mcp.tool()
 async def dados_municipio(
     flow: str = "export",
@@ -293,7 +294,7 @@ async def fetch_auxiliary_table(
                     - "cities": Lista de Cidades brasileiras e seus códigos.
                     - "ways": Lista de vias de transporte (ex: marítima, aérea) e seus códigos.
                     - "urf": Lista de Unidades da Receita Federal e seus códigos.
-                    - "economic-blocks": Lista de blocos econômicos (ex: Mercosul) e seus códigos.
+                    - "economic-blocks": Lista de blocos econômicos (ex: Europa, África, Mercosul) e seus códigos.
                     - "product-categories": Lista de códigos e descrições de produtos CUCI (Classificação por Grandes Categorias Econômicas), equivalente a SITC.
                     - "ncm": Lista de códigos e descrições da NCM (Nomenclatura Comum do Mercosul).
                     - "hs": Lista de códigos e descrições do SH (Sistema Harmonizado).
